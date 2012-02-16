@@ -20,11 +20,11 @@
  ******************************************************************************/
 package com.geeksville.maps;
 
-import org.andnav.osm.util.GeoPoint;
-import org.andnav.osm.views.OpenStreetMapView;
-import org.andnav.osm.views.OpenStreetMapViewController;
-import org.andnav.osm.views.OpenStreetMapView.OpenStreetMapViewProjection;
-import org.andnav.osm.views.overlay.MyLocationOverlay;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapController;
+import org.osmdroid.views.MapView;
+import org.osmdroid.views.MapView.Projection;
+import org.osmdroid.views.overlay.MyLocationOverlay;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -44,7 +44,7 @@ public class CenteredMyLocationOverlay extends MyLocationOverlay {
 
 	boolean handlingGPSUpdate = false;
 
-	public CenteredMyLocationOverlay(Context context, OpenStreetMapView mapView) {
+	public CenteredMyLocationOverlay(Context context, MapView mapView) {
 		super(context, mapView);
 	}
 
@@ -90,11 +90,11 @@ public class CenteredMyLocationOverlay extends MyLocationOverlay {
 	 *            do this if we recently received a location update from the gps
 	 *            - so click drags won't mess us up.
 	 */
-	protected void keepCentered(OpenStreetMapView mapView, GeoPoint myLocation) {
+	protected void keepCentered(MapView mapView, GeoPoint myLocation) {
 		// If we don't have an old position, assume it was centered, so we
 		// will zoom if needed. Always update this, so that click drags work
 		boolean oldInMiddle = curPixelPos != null ? inMiddle(mapView, curPixelPos) : true;
-		OpenStreetMapViewProjection proj = mapView.getProjection();
+		Projection proj = mapView.getProjection();
 		curPixelPos = proj.toMapPixels(myLocation, curPixelPos);
 
 		if (handlingGPSUpdate) {
@@ -102,7 +102,7 @@ public class CenteredMyLocationOverlay extends MyLocationOverlay {
 
 			boolean newInMiddle = inMiddle(mapView, curPixelPos);
 			if (oldInMiddle && !newInMiddle) {
-				OpenStreetMapViewController ctrl = mapView.getController();
+				MapController ctrl = mapView.getController();
 				ctrl.setCenter(myLocation);
 			}
 		}
@@ -133,13 +133,13 @@ public class CenteredMyLocationOverlay extends MyLocationOverlay {
 	 * from the gps - so click drags won't mess us up.
 	 */
 	@Override
-	public void onDraw(Canvas c, OpenStreetMapView mapView) {
+	public void draw(Canvas c, MapView mapView, boolean shadow) {
 		GeoPoint myLoc = getMyLocation();
 
 		if (myLoc != null)
 			keepCentered(mapView, myLoc);
 
-		super.onDraw(c, mapView);
+		super.draw(c, mapView, shadow);
 	}
 
 }

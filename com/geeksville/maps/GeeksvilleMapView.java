@@ -20,12 +20,13 @@
  ******************************************************************************/
 package com.geeksville.maps;
 
-import org.andnav.osm.views.OpenStreetMapView;
+
+import org.osmdroid.views.MapView;
 
 import android.content.Context;
 import android.util.AttributeSet;
 
-public class GeeksvilleMapView extends OpenStreetMapView {
+public class GeeksvilleMapView extends MapView {
 
   private Runnable postLayout;
 
