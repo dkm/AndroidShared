@@ -26,7 +26,7 @@ import org.osmdroid.views.MapView;
 import android.content.Context;
 import android.util.AttributeSet;
 
-public class GeeksvilleMapView extends MapView {
+public class GeeksvilleMapView extends ScrollChangeMapView {
 
   private Runnable postLayout;
 
